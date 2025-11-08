@@ -1,0 +1,22 @@
+{
+  "languages": {
+    "en": {
+      "name": "English",
+      "sets": {
+        "default": "Default"
+      }
+    },
+    "es": {
+      "name": "Español",
+      "sets": {
+        "spanish": "Español"
+      }
+    },
+    "pl": {
+      "name": "Polski",
+      "sets": {
+        "polish": "Polski"
+      }
+    }
+  }
+}
