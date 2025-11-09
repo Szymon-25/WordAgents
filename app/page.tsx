@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import LanguageSelector from '@/components/LanguageSelector';
 import RoleSelector from '@/components/RoleSelector';
+import RulesCarousel from '@/components/RulesCarousel';
 import { generateRandomSeed } from '@/lib/boardGenerator';
 import { buildGameUrl } from '@/lib/utils';
 import { Role, VocabularyManifest } from '@/types';
@@ -82,17 +83,12 @@ export default function Home() {
                   🔗 Join Game
                 </Button>
 
-                <Card className="mt-6 bg-slate-50 border-slate-200">
-                  <CardHeader>
-                    <CardTitle className="text-base">How to Play:</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-2 text-sm text-gray-700">
-                    <p>• <strong>Spymaster</strong>: See all card colors and give clues</p>
-                    <p>• <strong>Guesser</strong>: Make guesses based on clues</p>
-                    <p>• Share the 4-character game code with your team</p>
-                    <p>• Same code = same board for all players</p>
-                  </CardContent>
-                </Card>
+                <div className="mt-6">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4 text-center">
+                    📖 How to Play
+                  </h3>
+                  <RulesCarousel />
+                </div>
               </div>
             )}
 

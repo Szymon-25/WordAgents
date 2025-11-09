@@ -173,10 +173,10 @@ export default function GameBoard({ boardData, role }: GameBoardProps) {
     <div className="w-full h-full flex flex-col">
       {/* Main game area with counters */}
       <div className="flex items-start gap-2 flex-1">
-        {/* Left side - Blue team counter and character (ONLY for guessers) */}
-        {role === 'guesser' && (
+        {/* Left side - Blue team counter and character (visible for guessers and spymaster; counter invisible for spymaster) */}
+        {(role === 'guesser' || role === 'master') && (
           <div className="hidden md:flex flex-col items-center gap-3 min-w-[140px]">
-            <div className="text-blue-600">
+            <div className={"text-blue-600 " + (role === 'master' ? 'invisible' : '')}>
               <CircularProgress 
                 value={guessedCounts.blue}
                 max={maxCounts.blue}
@@ -190,7 +190,7 @@ export default function GameBoard({ boardData, role }: GameBoardProps) {
                 )}
               />
             </div>
-            {/* Blue character image */}
+            {/* Blue character image (visible for both roles) */}
             <img 
               src="/blue_character.png" 
               alt="Blue Team Character" 
@@ -284,10 +284,10 @@ export default function GameBoard({ boardData, role }: GameBoardProps) {
           <div className="hidden md:block flex-1" />
         </div>
 
-        {/* Right side - Red team counter and character (ONLY for guessers) */}
-        {role === 'guesser' && (
+        {/* Right side - Red team counter and character (visible for guessers and spymaster; counter invisible for spymaster) */}
+        {(role === 'guesser' || role === 'master') && (
           <div className="hidden md:flex flex-col items-center gap-3 min-w-[140px]">
-            <div className="text-red-600">
+            <div className={"text-red-600 " + (role === 'master' ? 'invisible' : '')}>
               <CircularProgress 
                 value={guessedCounts.red}
                 max={maxCounts.red}
@@ -301,7 +301,7 @@ export default function GameBoard({ boardData, role }: GameBoardProps) {
                 )}
               />
             </div>
-            {/* Red character image */}
+            {/* Red character image (visible for both roles) */}
             <img 
               src="/red_character.png" 
               alt="Red Team Character" 

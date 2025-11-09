@@ -4,12 +4,12 @@ import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import GameBoard from '@/components/GameBoard';
 import HeaderBar from '@/components/HeaderBar';
+import Footer from '@/components/Footer';
 import { generateBoard, generateRandomSeed } from '@/lib/boardGenerator';
 import { parseGameParams, buildGameUrl } from '@/lib/utils';
 import { BoardData, VocabularySet } from '@/types';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import FullscreenButton from '@/components/FullscreenButton';
 
 function GameContent() {
   const router = useRouter();
@@ -115,12 +115,14 @@ function GameContent() {
           onHome={() => router.push('/')}
         />
         
-        {/* Game Board - fills remaining space */}
-        <div className="flex-1 flex flex-col min-h-0 justify-center pt-8">
-          <div className="p-2 sm:p-3 flex-1 flex flex-col min-h-0">
+        {/* Game Board - fills remaining space and centers vertically when content fits */}
+        <div className="flex-1 flex flex-col min-h-0 justify-center py-4">
+          <div className="p-2 sm:p-3">
             <GameBoard boardData={boardData} role={params.role} />
           </div>
         </div>
+
+        <Footer />
       </div>
     </div>
   );
