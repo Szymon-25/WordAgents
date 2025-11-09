@@ -76,24 +76,24 @@ function GameContent() {
   const params = parseGameParams(searchParams)!;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 p-4">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 p-2 sm:p-4 flex flex-col">
+      <div className="max-w-[1600px] mx-auto w-full flex-1 flex flex-col">
         {/* Header */}
-        <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <div className="bg-white rounded-2xl shadow-lg p-3 sm:p-4 mb-2 sm:mb-4">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2 sm:gap-4">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
                 🕵️ Codenames
               </h1>
-              <div className="flex flex-wrap gap-3 text-sm">
-                <span className={`px-3 py-1 rounded-full font-semibold ${
+              <div className="flex flex-wrap gap-2 sm:gap-3 text-xs sm:text-sm">
+                <span className={`px-2 sm:px-3 py-1 rounded-full font-semibold ${
                   params.role === 'master' 
                     ? 'bg-purple-100 text-purple-800'
                     : 'bg-blue-100 text-blue-800'
                 }`}>
                   {params.role === 'master' ? '🎭 Spymaster' : '🕵️ Guesser'}
                 </span>
-                <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full font-mono text-xs">
+                <span className="px-2 sm:px-3 py-1 bg-gray-100 text-gray-700 rounded-full font-mono text-xs">
                   Seed: {boardData.seed}
                 </span>
               </div>
@@ -102,26 +102,21 @@ function GameContent() {
             <div className="flex flex-col sm:flex-row gap-2">
               <button
                 onClick={() => router.push('/')}
-                className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors font-semibold"
+                className="px-3 sm:px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors font-semibold text-sm"
               >
                 🏠 New Game
               </button>
             </div>
           </div>
 
-          <div className="mt-4">
+          <div className="mt-2 sm:mt-4">
             <ShareLink params={params} />
           </div>
         </div>
 
-        {/* Game Board */}
-        <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6">
+        {/* Game Board - fills remaining space */}
+        <div className="bg-white rounded-2xl shadow-lg p-2 sm:p-4 flex-1 flex flex-col min-h-0">
           <GameBoard boardData={boardData} role={params.role} />
-        </div>
-
-        {/* Footer */}
-        <div className="mt-6 text-center text-gray-600 text-sm">
-          <p>🎮 Codenames - A word-based guessing game</p>
         </div>
       </div>
     </div>
