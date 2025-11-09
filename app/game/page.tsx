@@ -3,7 +3,7 @@
 import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import GameBoard from '@/components/GameBoard';
-import ShareLink from '@/components/ShareLink';
+import HeaderBar from '@/components/HeaderBar';
 import { generateBoard, generateRandomSeed } from '@/lib/boardGenerator';
 import { parseGameParams, buildGameUrl } from '@/lib/utils';
 import { BoardData, VocabularySet } from '@/types';
@@ -105,65 +105,22 @@ function GameContent() {
   const params = parseGameParams(searchParams)!;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 p-2 sm:p-4 flex flex-col">
+    <div className="min-h-screen p-1 flex flex-col" style={{ background: 'radial-gradient(circle at center, white 0%, #cbd1dbff 50%, #110b66ff 100%)' }}>
       <div className="max-w-[1600px] mx-auto w-full flex-1 flex flex-col">
-        {/* Header */}
-        <Card className="mb-2 sm:mb-3 shadow-lg border-2">
-          <CardContent className="p-3 sm:p-4">
-            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
-              <div>
-                <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2">
-                  🕵️ Word Agents
-                </h1>
-                <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs sm:text-sm">
-                  <span className={`px-3 py-1.5 rounded-full font-semibold shadow-sm ${
-                    params.role === 'master' 
-                      ? 'bg-purple-100 text-purple-800 border border-purple-300'
-                      : 'bg-blue-100 text-blue-800 border border-blue-300'
-                  }`}>
-                    {params.role === 'master' ? '🎭 Spymaster' : '🕵️ Guesser'}
-                  </span>
-                  <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-400 rounded-full shadow-sm">
-                    <span className="text-xs font-medium text-gray-700">Game Code:</span>
-                    <span className="font-mono font-bold text-lg text-green-700 tracking-wider">
-                      {boardData.seed}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-2 items-stretch sm:items-center">
-                <Button
-                  onClick={handleNextGame}
-                  variant="default"
-                  className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold"
-                >
-                  🎲 Next Game
-                </Button>
-                <Button
-                  onClick={() => router.push('/')}
-                  variant="outline"
-                  className="font-semibold"
-                >
-                  🏠 Home
-                </Button>
-                {/* Fullscreen toggle */}
-                <FullscreenButton className="sm:ml-2" />
-              </div>
-            </div>
-
-            <div className="mt-3">
-              <ShareLink params={params} seed={boardData.seed} />
-            </div>
-          </CardContent>
-        </Card>
-
+        <HeaderBar 
+          boardData={boardData}
+          params={params}
+          role={params.role}
+          onNextGame={handleNextGame}
+          onHome={() => router.push('/')}
+        />
+        
         {/* Game Board - fills remaining space */}
-        <Card className="flex-1 flex flex-col min-h-0 shadow-lg border-2">
-          <CardContent className="p-2 sm:p-3 flex-1 flex flex-col min-h-0">
+        <div className="flex-1 flex flex-col min-h-0 justify-center pt-8">
+          <div className="p-2 sm:p-3 flex-1 flex flex-col min-h-0">
             <GameBoard boardData={boardData} role={params.role} />
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
     </div>
   );
