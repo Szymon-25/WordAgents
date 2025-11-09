@@ -8,6 +8,9 @@ import { generateRandomSeed } from '@/lib/boardGenerator';
 import { buildGameUrl } from '@/lib/utils';
 import { Role, VocabularyManifest } from '@/types';
 import manifest from '@/data/vocab/manifest.json';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function Home() {
   const router = useRouter();
@@ -15,7 +18,7 @@ export default function Home() {
   const [selectedLang, setSelectedLang] = useState('en');
   const [selectedSet, setSelectedSet] = useState('default');
   const [selectedRole, setSelectedRole] = useState<Role>('guesser');
-  const [joinSeed, setJoinSeed] = useState('');
+  const [joinCode, setJoinCode] = useState('');
 
   const vocabManifest = manifest as VocabularyManifest;
 
@@ -38,9 +41,9 @@ export default function Home() {
   };
 
   const handleJoinGame = () => {
-    if (!joinSeed.trim()) return;
+    if (!joinCode.trim()) return;
     const url = buildGameUrl({
-      seed: joinSeed.trim(),
+      seed: joinCode.trim().toUpperCase(),
       role: selectedRole,
       lang: selectedLang,
       set: selectedSet
@@ -49,124 +52,137 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center p-4">
-      <main className="w-full max-w-2xl bg-white rounded-2xl shadow-2xl p-8">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-2">
-            🕵️ Codenames
-          </h1>
-          <p className="text-gray-600 text-lg">
-            A word-based guessing game for teams
-          </p>
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 flex items-center justify-center p-4">
+      <main className="w-full max-w-2xl">
+        <Card className="shadow-2xl border-2">
+          <CardHeader className="text-center space-y-2 pb-4">
+            <CardTitle className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+              🕵️ Word Agents
+            </CardTitle>
+            <CardDescription className="text-lg text-gray-600">
+              A strategic word-based guessing game for teams
+            </CardDescription>
+          </CardHeader>
 
-        {mode === null && (
-          <div className="space-y-4">
-            <button
-              onClick={() => setMode('create')}
-              className="w-full py-6 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-bold text-xl hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105 shadow-lg"
-            >
-              🎮 Create New Game
-            </button>
-            <button
-              onClick={() => setMode('join')}
-              className="w-full py-6 bg-gradient-to-r from-green-600 to-teal-600 text-white rounded-xl font-bold text-xl hover:from-green-700 hover:to-teal-700 transition-all transform hover:scale-105 shadow-lg"
-            >
-              🔗 Join Existing Game
-            </button>
+          <CardContent>
+            {mode === null && (
+              <div className="space-y-4">
+                <Button
+                  onClick={() => setMode('create')}
+                  className="w-full h-16 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-xl font-bold shadow-lg"
+                  size="lg"
+                >
+                  🎮 Create New Game
+                </Button>
+                <Button
+                  onClick={() => setMode('join')}
+                  className="w-full h-16 bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700 text-white text-xl font-bold shadow-lg"
+                  size="lg"
+                >
+                  🔗 Join Game
+                </Button>
 
-            <div className="mt-8 p-6 bg-gray-50 rounded-xl">
-              <h3 className="font-semibold text-gray-800 mb-2">How to Play:</h3>
-              <ul className="text-sm text-gray-600 space-y-1">
-                <li>• <strong>Spymaster</strong>: See all card colors and give clues</li>
-                <li>• <strong>Guesser</strong>: Make guesses based on clues</li>
-                <li>• Share the game link with your team to play together</li>
-                <li>• Same seed = same board for all players</li>
-              </ul>
-            </div>
-          </div>
-        )}
+                <Card className="mt-6 bg-slate-50 border-slate-200">
+                  <CardHeader>
+                    <CardTitle className="text-base">How to Play:</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-2 text-sm text-gray-700">
+                    <p>• <strong>Spymaster</strong>: See all card colors and give clues</p>
+                    <p>• <strong>Guesser</strong>: Make guesses based on clues</p>
+                    <p>• Share the 4-character game code with your team</p>
+                    <p>• Same code = same board for all players</p>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
 
-        {mode === 'create' && (
-          <div className="space-y-6">
-            <button
-              onClick={() => setMode(null)}
-              className="text-gray-600 hover:text-gray-800 font-medium"
-            >
-              ← Back
-            </button>
+            {mode === 'create' && (
+              <div className="space-y-6">
+                <Button
+                  onClick={() => setMode(null)}
+                  variant="ghost"
+                  className="mb-2"
+                >
+                  ← Back
+                </Button>
 
-            <h2 className="text-2xl font-bold text-gray-900">Create New Game</h2>
+                <h2 className="text-2xl font-bold text-gray-900">Create New Game</h2>
 
-            <LanguageSelector
-              manifest={vocabManifest}
-              selectedLang={selectedLang}
-              selectedSet={selectedSet}
-              onLanguageChange={handleLanguageChange}
-              onSetChange={setSelectedSet}
-            />
+                <LanguageSelector
+                  manifest={vocabManifest}
+                  selectedLang={selectedLang}
+                  selectedSet={selectedSet}
+                  onLanguageChange={handleLanguageChange}
+                  onSetChange={setSelectedSet}
+                />
 
-            <RoleSelector
-              selectedRole={selectedRole}
-              onRoleChange={setSelectedRole}
-            />
+                <RoleSelector
+                  selectedRole={selectedRole}
+                  onRoleChange={setSelectedRole}
+                />
 
-            <button
-              onClick={handleCreateGame}
-              className="w-full py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-bold text-lg hover:from-blue-700 hover:to-purple-700 transition-all shadow-lg"
-            >
-              Start Game →
-            </button>
-          </div>
-        )}
+                <Button
+                  onClick={handleCreateGame}
+                  className="w-full h-12 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-lg shadow-lg"
+                  size="lg"
+                >
+                  Start Game →
+                </Button>
+              </div>
+            )}
 
-        {mode === 'join' && (
-          <div className="space-y-6">
-            <button
-              onClick={() => setMode(null)}
-              className="text-gray-600 hover:text-gray-800 font-medium"
-            >
-              ← Back
-            </button>
+            {mode === 'join' && (
+              <div className="space-y-6">
+                <Button
+                  onClick={() => setMode(null)}
+                  variant="ghost"
+                  className="mb-2"
+                >
+                  ← Back
+                </Button>
 
-            <h2 className="text-2xl font-bold text-gray-900">Join Existing Game</h2>
+                <h2 className="text-2xl font-bold text-gray-900">Join Game</h2>
 
-            <div>
-              <label htmlFor="seed" className="block text-sm font-medium text-gray-700 mb-2">
-                Game Seed:
-              </label>
-              <input
-                id="seed"
-                type="text"
-                value={joinSeed}
-                onChange={(e) => setJoinSeed(e.target.value)}
-                placeholder="Enter game seed..."
-                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-              />
-            </div>
+                <div>
+                  <label htmlFor="code" className="block text-sm font-medium text-gray-700 mb-2">
+                    Enter 4-Character Game Code:
+                  </label>
+                  <Input
+                    id="code"
+                    type="text"
+                    value={joinCode}
+                    onChange={(e) => setJoinCode(e.target.value.toUpperCase())}
+                    placeholder="e.g., A1B2"
+                    maxLength={4}
+                    className="text-center text-2xl font-mono font-bold uppercase tracking-widest"
+                  />
+                </div>
 
-            <LanguageSelector
-              manifest={vocabManifest}
-              selectedLang={selectedLang}
-              selectedSet={selectedSet}
-              onLanguageChange={handleLanguageChange}
-              onSetChange={setSelectedSet}
-            />
+                <LanguageSelector
+                  manifest={vocabManifest}
+                  selectedLang={selectedLang}
+                  selectedSet={selectedSet}
+                  onLanguageChange={handleLanguageChange}
+                  onSetChange={setSelectedSet}
+                />
 
-            <RoleSelector
-              selectedRole={selectedRole}
-              onRoleChange={setSelectedRole}
-            />
+                <RoleSelector
+                  selectedRole={selectedRole}
+                  onRoleChange={setSelectedRole}
+                />
 
-            <button
-              onClick={handleJoinGame}
-              disabled={!joinSeed.trim()}
-              className="w-full py-4 bg-gradient-to-r from-green-600 to-teal-600 text-white rounded-xl font-bold text-lg hover:from-green-700 hover:to-teal-700 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Join Game →
-            </button>
-          </div>
-        )}
+                <Button
+                  onClick={handleJoinGame}
+                  disabled={joinCode.trim().length !== 4}
+                  className="w-full h-12 bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700 text-white font-bold text-lg shadow-lg disabled:opacity-50"
+                  size="lg"
+                >
+                  Join Game →
+                </Button>
+              </div>
+            )}
+          </CardContent>
+        </Card>
       </main>
     </div>
   );

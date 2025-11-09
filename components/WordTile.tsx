@@ -36,16 +36,16 @@ export default function WordTile({ tile, role, showKey, onToggle }: WordTileProp
     <button
       onClick={() => onToggle(tile.index)}
       className={cn(
-        'relative w-full transition-all duration-200 flex items-center justify-center p-2',
-        'border-4 rounded-xl font-bold text-sm sm:text-base md:text-lg',
-        'shadow-lg active:scale-95',
-        'aspect-[3/2]', // Make tiles rectangular instead of square
+        'relative w-full transition-all duration-200 flex items-center justify-center',
+        'border-2 rounded-lg font-bold text-xs sm:text-sm',
+        'shadow-md active:scale-95',
+        'aspect-[4/3] p-1', // Compact aspect ratio with minimal padding
         getColorClasses(),
         tile.guessed ? 'cursor-default' : 'cursor-pointer'
       )}
       aria-label={`${tile.word}${shouldShowColor ? `, ${tile.team} team` : ''}${tile.guessed ? ', guessed' : ''}`}
     >
-      <span className="text-center break-words hyphens-auto px-1 uppercase tracking-wide">
+      <span className="text-center break-words hyphens-auto uppercase tracking-tight leading-tight">
         {tile.word}
       </span>
     </button>
