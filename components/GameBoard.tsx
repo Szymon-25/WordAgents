@@ -176,18 +176,18 @@ export default function GameBoard({ boardData, role }: GameBoardProps) {
         {/* Left side - Blue team counter and character (visible for guessers and spymaster; counter invisible for spymaster) */}
         {(role === 'guesser' || role === 'master') && (
           <div className="hidden md:flex flex-col items-center gap-3 min-w-[140px]">
-            <div className={"text-blue-600 " + (role === 'master' ? 'invisible' : '')}>
+            <div style={{ color: '#17527f' }} className={role === 'master' ? 'invisible' : ''}>
               <CircularProgress 
-                value={guessedCounts.blue}
-                max={maxCounts.blue}
-                size={140}
-                progressClassName="stroke-blue-600"
-                labelClassName="text-sm font-bold text-blue-600"
-                renderLabel={(current, max) => (
-                  <div className="flex flex-col items-center gap-0">
-                    <div className="text-5xl font-bold">{current}<span className="text-xl">/{max}</span></div>
-                  </div>
-                )}
+              value={guessedCounts.blue}
+              max={maxCounts.blue}
+              size={140}
+              progressClassName="stroke-[#00a3d8]"
+              labelClassName="text-sm font-bold"
+              renderLabel={(current, max) => (
+                <div className="flex flex-col items-center gap-0">
+                <div className="text-5xl font-bold">{current}<span className="text-xl">/{max}</span></div>
+                </div>
+              )}
               />
             </div>
             {/* Blue character image (visible for both roles) */}
@@ -287,13 +287,13 @@ export default function GameBoard({ boardData, role }: GameBoardProps) {
         {/* Right side - Red team counter and character (visible for guessers and spymaster; counter invisible for spymaster) */}
         {(role === 'guesser' || role === 'master') && (
           <div className="hidden md:flex flex-col items-center gap-3 min-w-[140px]">
-            <div className={"text-red-600 " + (role === 'master' ? 'invisible' : '')}>
+            <div style={{ color: '#852d15' }} className={(role === 'master' ? 'invisible' : '')}>
               <CircularProgress 
                 value={guessedCounts.red}
                 max={maxCounts.red}
                 size={140}
                 progressClassName="stroke-red-600"
-                labelClassName="text-sm font-bold text-red-600"
+                labelClassName="text-sm font-bold"
                 renderLabel={(current, max) => (
                   <div className="flex flex-col items-center gap-0">
                     <div className="text-5xl font-bold">{current}<span className="text-xl">/{max}</span></div>

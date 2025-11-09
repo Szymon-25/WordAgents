@@ -72,14 +72,14 @@ function TileCard({ text, palette, onClick, disabled, ariaLabel }: TileCardProps
         !isMobile && 'aspect-[5/4] xs:aspect-[6/4] sm:aspect-[8/5]',
         disabled ? 'cursor-default opacity-100' : 'cursor-pointer hover:brightness-110 active:scale-95'
       )}
-      style={{ backgroundColor: palette.outer, borderColor: '#888', borderWidth: isMobile ? 1 : 2, borderStyle: 'solid' }}
+      style={{ backgroundColor: palette.outer, borderColor: palette.dark, borderWidth: isMobile ? 1 : 2, borderStyle: 'solid' }}
     >
       <div
         className={cn(
           'relative w-full h-full flex flex-col',
           isMobile ? 'rounded-sm border' : 'rounded-md border'
         )}
-        style={{ backgroundColor: palette.inner, borderColor: '#888', borderWidth: isMobile ? 1 : 2, borderStyle: 'solid' }}
+        style={{ backgroundColor: palette.inner, borderColor: palette.dark, borderWidth: isMobile ? 1 : 2, borderStyle: 'solid' }}
       >
         {/* Mid horizontal divider (slightly lower on mobile to avoid overlay) */}
         <div
@@ -99,7 +99,7 @@ function TileCard({ text, palette, onClick, disabled, ariaLabel }: TileCardProps
             )}
             style={{
               backgroundColor: palette.dark,
-              borderColor: '#888',
+              borderColor: palette.dark,
               borderWidth: isMobile ? 1 : 2,
               borderStyle: 'solid',
               color: palette.text,

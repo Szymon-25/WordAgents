@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { ChevronsRight, Home, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -26,7 +27,7 @@ export function HeaderBar({ boardData, params, role, onNextGame, onHome }: Heade
           {/* Title and Role */}
           <div className="flex items-center gap-3">
             <h1 className="flex items-center gap-2 text-white tracking-tight">
-              <User className="h-5 w-5 sm:h-6 sm:w-6 flex-shrink-0" />
+              <Image alt="Word Agents Logo" src="/logo.png" width={32} height={32}/>
               <span className="hidden sm:inline">Word Agents</span>
             </h1>
             
