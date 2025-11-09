@@ -11,7 +11,7 @@ A modern, accessible, and deterministic web-based implementation of the popular 
 - **🌍 Multi-language Support**: English, Spanish, and Polish vocabularies included
 - **🔗 Easy Sharing**: Share game links with specific roles via URL
 - **♿ Accessibility**: Colorblind mode with patterns and symbols
-- **📱 Responsive Design**: Works seamlessly on desktop, tablet, and mobile
+- **📱 Mobile-First Play**: On phones, the grid opens in fullscreen landscape with auto-fitting text so all words are visible without manual zooming
 - **💾 Local State Persistence**: Guessed tiles are saved to localStorage
 - **⚡ Static Export**: Fully static site that can be hosted anywhere
 

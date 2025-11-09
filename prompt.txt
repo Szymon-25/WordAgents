@@ -1,0 +1,211 @@
+access token: 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
+
+### 💬 **Prompt for Copilot**
+
+> **Goal:**
+> Build a modern, accessible, deterministic web game inspired by *Codenames* (like [https://ninjabunny.github.io/KodeNames/#](https://ninjabunny.github.io/KodeNames/#)) using **React + Next.js + TypeScript**.
+> The site must let multiple players join the same game via shared seed URLs and choose a role: **Guesser** or **Master (Spymaster)**.
+> The game must produce **the same board for the same seed** across all clients.
+> Vocabulary should be **fully editable via simple JSON files**, with **multi-language support** and the ability to easily add new languages or custom vocabularies without changing the code.
+
+---
+
+### 🧩 1. Architecture & Tech Stack
+
+* Framework: **Next.js (App Router, TypeScript, React 18)**
+* Styling: **TailwindCSS** (responsive, minimal aesthetic)
+* State management: **React hooks + Context API**
+* Deterministic RNG: use **seedrandom** library or custom PRNG utility
+* File structure must separate **data**, **components**, **lib**, and **pages**
+
+```
+/src
+ ├─ /app
+ │   ├─ page.tsx                → Landing / join page
+ │   ├─ /game/page.tsx          → Main game board
+ ├─ /components                 → UI components (Board, Tile, RoleSelector…)
+ ├─ /lib                        → PRNG, board generator, utils
+ ├─ /data/vocab                 → Word sets grouped by language
+ │    ├─ en/default.json
+ │    ├─ en/movies.json
+ │    ├─ es/spanish.json
+ │    ├─ fr/french.json
+ │    └─ manifest.json
+ └─ /types                      → Shared TS interfaces
+```
+
+---
+
+### 🧠 2. Core Features
+
+1. **Deterministic board generation**
+
+   * Same `seed` + vocabulary always produce identical layout and color assignments.
+   * Use seeded PRNG to:
+
+     * Shuffle vocabulary and pick first 25 words (5×5 grid).
+     * Assign colors deterministically (red = 9, blue = 8, neutral = 7, assassin = 1).
+   * Expose function:
+
+     ```ts
+     generateBoard(seed: string, vocab: string[]): BoardData
+     ```
+
+     Returns `{ words, assignments, teamStart }`.
+
+2. **Two roles**
+
+   * **Guesser** → sees words only; can click to mark guesses.
+   * **Master (Spymaster)** → sees color overlay (team colors, neutral, assassin).
+   * Role controlled by URL param or in-app selector.
+
+3. **Join & share flow**
+
+   * Landing page has:
+
+     * “Create New Game” (generates random seed, choose language + set)
+     * “Join Game” (enter existing seed, choose role)
+   * After selecting, redirect to `/game?seed=XYZ&role=master&lang=en&set=default`
+   * Show “Copy link to share” button.
+
+4. **Language / Vocabulary system**
+
+   * Vocabulary files live under `/data/vocab/<lang>/<set>.json` as:
+
+     ```json
+     { "title": "Default", "language": "en", "words": ["APPLE", "MOON", "LASER", …] }
+     ```
+   * On startup, load `/data/vocab/manifest.json` listing all available languages + sets.
+   * In UI, dropdowns:
+
+     * Language → loads available sets
+     * Set → loads vocabulary
+   * Adding a new language or set = drop new JSON file and update manifest (no code change).
+   * Optionally allow “Custom Words” mode: user pastes newline-separated list → stored in state only.
+
+5. **UI / UX**
+
+   * Clean responsive grid (5×5 default) with large touch-friendly tiles.
+   * Roles displayed clearly:
+
+     * Header shows “You are the Master / Guesser”.
+     * Seed shown at top with “Copy Seed” and “New Game” buttons.
+   * For Master: button “Show Key / Hide Key” toggles visibility of color assignments.
+   * Color scheme:
+
+     * Red team, Blue team, Neutral (gray), Assassin (black)
+     * Provide “Colorblind Mode” toggle (patterned borders or icons).
+   * Mobile-friendly layout (grid shrinks gracefully).
+   * Accessibility: high-contrast text, ARIA labels.
+
+6. **Game state**
+
+   * Words & assignments derived from deterministic generator (no backend needed).
+   * Tile click marks word as guessed (client-side only).
+   * Optional: localStorage save of guessed tiles per seed.
+
+7. **Optional enhancements**
+
+   * Support grid size selector (e.g., 5×5, 6×6).
+   * Turn timer & score tracker (optional).
+   * Dark mode toggle.
+   * Export/print board as PDF.
+   * Multi-language UI labels using Next.js i18n.
+
+---
+
+### ⚙️ 3. Implementation Details
+
+* Use **Next.js dynamic routing**; parse query params via `useSearchParams()`.
+* Components to create:
+
+  * `<LandingPage />`
+  * `<GameBoard />`
+  * `<WordTile />`
+  * `<RoleSelector />`
+  * `<LanguageSelector />`
+  * `<VocabularySelector />`
+  * `<ShareLink />`
+* Utilities:
+
+  * `/lib/prng.ts` → deterministic RNG (seedrandom wrapper).
+  * `/lib/boardGenerator.ts` → generate board & assignments.
+  * `/lib/utils.ts` → seed helpers, query-param helpers.
+* Types:
+
+  ```ts
+  interface Tile { word: string; team: "red"|"blue"|"neutral"|"assassin"; guessed: boolean; }
+  interface BoardData { seed: string; tiles: Tile[]; teamStart: "red"|"blue"; }
+  ```
+* Keep all game state client-side; no backend or DB required.
+
+---
+
+### 🧰 4. Developer Experience
+
+* Use TypeScript strict mode.
+* ESLint + Prettier preconfigured.
+* Include `README.md` explaining:
+
+  * How deterministic generation works
+  * How to add new languages / vocab sets
+  * How to run locally (`npm run dev`) and deploy (e.g., Vercel)
+* Include sample vocabularies:
+
+  * English – default.json
+  * Spanish – spanish.json
+  * French – french.json
+* Include small utility script `/scripts/buildManifest.ts` that scans `/data/vocab` and generates manifest.json automatically.
+
+---
+
+### 🎮 5. User Flow Summary
+
+1. **Visit landing page**
+
+   * Choose: Create Game / Join Game
+   * Select language + vocabulary
+   * Pick role (Master or Guesser)
+2. **If Create Game**
+
+   * Generate new seed
+   * Redirect to `/game?seed=<seed>&role=master&lang=en&set=default`
+   * Show “Share link for guessers”
+3. **If Join Game**
+
+   * Enter existing seed
+   * Pick role
+   * Redirect to `/game?...`
+4. **Game board**
+
+   * Grid generated from seed & vocab
+   * Master view: colored overlay; Guesser view: plain
+   * Click tiles to mark guessed
+   * Buttons: Show/Hide Key, New Game, Copy Link
+   * Responsive & colorblind-friendly
+5. **Add / Edit vocabulary**
+
+   * Drop new JSON file under `/data/vocab/<lang>/<set>.json`
+   * Rebuild (manifest updates automatically)
+   * New sets appear in dropdowns.
+
+---
+
+### ✅ 6. Acceptance Criteria
+
+* [ ] Deterministic grid & assignments for identical seeds
+* [ ] Switching between Master / Guesser only changes visibility, not grid data
+* [ ] Easy to add new language vocabulary files
+* [ ] Responsive layout and accessible colors
+* [ ] Copy-link / seed share works
+* [ ] Clear landing & join flow
+* [ ] Code cleanly organized, typed, documented
+* [ ] Works entirely client-side (no backend needed)
+* [ ] Supports at least English, Spanish, French by default
+* [ ] Custom word input functional
+
+---
+
+**Now, Copilot:**
+Create this full Next.js project step-by-step — start by scaffolding the app, setting up Tailwind, adding seedrandom, and implementing deterministic board generation logic, then build the landing and game pages with the described components and flows.
+

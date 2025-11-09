@@ -2,6 +2,8 @@
 
 import { Tile, Role } from '@/types';
 import { cn } from '@/lib/utils';
+import { useFitText } from '@/lib/useFitText';
+import { useIsMobile } from '@/lib/useIsMobile';
 
 interface WordTileProps {
   tile: Tile;
@@ -10,44 +12,111 @@ interface WordTileProps {
   onToggle: (index: number) => void;
 }
 
+// Centralized HEX color palettes
+type TeamKey = Tile['team'] | 'hidden';
+const PALETTES: Record<TeamKey, { outer: string; inner: string; dark: string; text: string }> = {
+  red:      { outer: '#ff9159', inner: '#f8543a', dark: '#852d15', text: '#FFFFFF' },
+  blue:     { outer: '#3dd1ee', inner: '#00a3d8', dark: '#17527f', text: '#FFFFFF' },
+  neutral:  { outer: '#e7e1dcff', inner: '#c0bebdff', dark: '#706256ff', text: '#FFFFFF' },
+  assassin: { outer: '#8c8d8d', inner: '#525252', dark: '#2a2a2a', text: '#FFFFFF' },
+  hidden:   { outer: '#ffd5af', inner: '#ffd5af', dark: '#967355', text: '#FFFFFF' },
+};
+
 export default function WordTile({ tile, role, showKey, onToggle }: WordTileProps) {
   const isMaster = role === 'master';
   const shouldShowColor = isMaster && showKey;
 
-  const getColorClasses = () => {
-    if (!shouldShowColor && !tile.guessed) {
-      return 'bg-amber-50 hover:bg-amber-100 border-amber-400 text-gray-800 shadow-md hover:shadow-lg';
-    }
+  const visualTeam: TeamKey = (shouldShowColor || tile.guessed) ? tile.team : 'hidden';
+  const palette = PALETTES[visualTeam];
 
-    const teamColors = {
-      red: 'bg-red-500 border-red-600 text-white shadow-red-200',
-      blue: 'bg-blue-500 border-blue-600 text-white shadow-blue-200',
-      neutral: 'bg-gray-400 border-gray-500 text-gray-800 shadow-gray-200',
-      assassin: 'bg-black border-gray-900 text-white shadow-gray-400'
-    };
+  // Only allow clicking if the tile is 'hidden' and not guessed
+  const clickable = visualTeam === 'hidden' && !tile.guessed;
 
-    return cn(
-      teamColors[tile.team],
-      tile.guessed ? 'opacity-60' : 'hover:opacity-90'
-    );
-  };
+  return (
+    <TileCard
+      text={tile.word}
+      palette={palette}
+      onClick={clickable ? () => onToggle(tile.index) : undefined}
+      disabled={!clickable}
+      ariaLabel={`${tile.word}${shouldShowColor ? `, ${tile.team} team` : ''}${tile.guessed ? ', guessed' : ''}`}
+    />
+  );
+}
+
+interface TileCardProps {
+  text: string;
+  palette: { outer: string; inner: string; dark: string; text: string };
+  onClick?: () => void;
+  disabled?: boolean;
+  ariaLabel?: string;
+}
+
+function TileCard({ text, palette, onClick, disabled, ariaLabel }: TileCardProps) {
+  const isMobile = useIsMobile();
+  // Auto-fit only on mobile: allow font between 10px and 42px
+  const { containerRef, textRef, fontSize } = useFitText({ min: 1, max: 18, step: 1, enabled: isMobile });
 
   return (
     <button
-      onClick={() => onToggle(tile.index)}
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      aria-label={ariaLabel}
       className={cn(
-        'relative w-full transition-all duration-200 flex items-center justify-center',
-        'border-2 rounded-lg font-bold text-xs sm:text-sm',
-        'shadow-md active:scale-95',
-        'aspect-[4/3] p-1', // Compact aspect ratio with minimal padding
-        getColorClasses(),
-        tile.guessed ? 'cursor-default' : 'cursor-pointer'
+        'relative w-full transition-all duration-150',
+        // Borders/Padding: minimal on mobile to maximize text area
+        isMobile
+          ? 'rounded-md border p-0.5'
+          : 'rounded-lg border p-1 sm:p-2',
+        // Adaptive aspect ratio: taller on very small screens for readability
+        !isMobile && 'aspect-[5/4] xs:aspect-[6/4] sm:aspect-[8/5]',
+        disabled ? 'cursor-default opacity-100' : 'cursor-pointer hover:brightness-110 active:scale-95'
       )}
-      aria-label={`${tile.word}${shouldShowColor ? `, ${tile.team} team` : ''}${tile.guessed ? ', guessed' : ''}`}
+      style={{ backgroundColor: palette.outer, borderColor: '#888', borderWidth: isMobile ? 1 : 2, borderStyle: 'solid' }}
     >
-      <span className="text-center break-words hyphens-auto uppercase tracking-tight leading-tight">
-        {tile.word}
-      </span>
+      <div
+        className={cn(
+          'relative w-full h-full flex flex-col',
+          isMobile ? 'rounded-sm border' : 'rounded-md border'
+        )}
+        style={{ backgroundColor: palette.inner, borderColor: '#888', borderWidth: isMobile ? 1 : 2, borderStyle: 'solid' }}
+      >
+        {/* Mid horizontal divider (slightly lower on mobile to avoid overlay) */}
+        <div
+          className={cn(
+            'absolute left-0 w-full h-[2px] opacity-50',
+            isMobile ? 'top-[50%]' : 'top-1/2'
+          )}
+          style={{ backgroundColor: palette.dark }}
+        />
+        {/* Bottom bar with word text (inset and centered) */}
+        <div className="absolute left-0 bottom-0 flex items-center justify-center h-1/2 w-full px-1.5 pb-1 pt-1">
+          <div
+            ref={isMobile ? containerRef : undefined}
+            className={cn(
+              'w-full flex items-center justify-center rounded-[4px] border text-center',
+              isMobile ? 'py-1' : 'py-1 sm:py-1.5'
+            )}
+            style={{
+              backgroundColor: palette.dark,
+              borderColor: '#888',
+              borderWidth: isMobile ? 1 : 2,
+              borderStyle: 'solid',
+              color: palette.text,
+              boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.3)'
+            }}
+          >
+            <span
+              ref={isMobile ? textRef : undefined}
+              className="block w-full font-black tracking-tight uppercase"
+              style={{ fontSize: isMobile ? fontSize : undefined, lineHeight: 1, letterSpacing: '0.5px' }}
+            >
+              {text}
+            </span>
+          </div>
+        </div>
+      </div>
     </button>
   );
 }
+

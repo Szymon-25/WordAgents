@@ -36,7 +36,7 @@ export default function ShareLink({ params, seed }: ShareLinkProps) {
 
   return (
     <div className="space-y-3">
-      <div className="flex flex-col sm:flex-row gap-2">
+      {/* <div className="flex flex-col sm:flex-row gap-2">
         <Button
           onClick={handleCopy}
           variant="default"
@@ -44,7 +44,7 @@ export default function ShareLink({ params, seed }: ShareLinkProps) {
         >
           {copied ? '✓ Copied!' : '📋 Copy Current Link'}
         </Button>
-      </div>
+      </div> */}
 
       <details className="bg-slate-50 rounded-lg p-3 border">
         <summary className="cursor-pointer font-semibold text-gray-700 hover:text-gray-900 text-sm">
@@ -55,17 +55,17 @@ export default function ShareLink({ params, seed }: ShareLinkProps) {
             <label className="block text-xs font-medium text-gray-700 mb-1">
               Spymaster Link:
             </label>
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2 w-full">
               <Input
                 type="text"
                 value={masterUrl}
                 readOnly
-                className="flex-1 text-xs"
+                className="w-full text-[10px] sm:text-xs truncate"
               />
               <Button
                 onClick={() => handleCopyRole(masterUrl)}
                 size="sm"
-                className="bg-purple-600 hover:bg-purple-700 text-white"
+                className="bg-purple-600 hover:bg-purple-700 text-white w-full sm:w-auto"
               >
                 Copy
               </Button>
@@ -75,17 +75,17 @@ export default function ShareLink({ params, seed }: ShareLinkProps) {
             <label className="block text-xs font-medium text-gray-700 mb-1">
               Guesser Link:
             </label>
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2 w-full">
               <Input
                 type="text"
                 value={guesserUrl}
                 readOnly
-                className="flex-1 text-xs"
+                className="w-full text-[10px] sm:text-xs truncate"
               />
               <Button
                 onClick={() => handleCopyRole(guesserUrl)}
                 size="sm"
-                className="bg-blue-600 hover:bg-blue-700 text-white"
+                className="bg-blue-600 hover:bg-blue-700 text-white w-full sm:w-auto"
               >
                 Copy
               </Button>

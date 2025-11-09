@@ -9,6 +9,7 @@ import { parseGameParams, buildGameUrl } from '@/lib/utils';
 import { BoardData, VocabularySet } from '@/types';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import FullscreenButton from '@/components/FullscreenButton';
 
 function GameContent() {
   const router = useRouter();
@@ -131,7 +132,7 @@ function GameContent() {
                 </div>
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-2">
+              <div className="flex flex-col sm:flex-row gap-2 items-stretch sm:items-center">
                 <Button
                   onClick={handleNextGame}
                   variant="default"
@@ -146,6 +147,8 @@ function GameContent() {
                 >
                   🏠 Home
                 </Button>
+                {/* Fullscreen toggle */}
+                <FullscreenButton className="sm:ml-2" />
               </div>
             </div>
 
