@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Codenames - Word Guessing Game",
-  description: "A modern, deterministic Codenames word-based guessing game. Play with friends using shared seed URLs.",
+  title: "Word Agents - Word Guessing Game",
+  description: "A modern, deterministic word-based guessing game. Play with friends using shared game codes.",
 };
 
 export default function RootLayout({
