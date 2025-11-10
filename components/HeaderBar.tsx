@@ -1,9 +1,11 @@
 "use client";
 
 import Image from "next/image";
+import { useState } from "react";
 import { ChevronsRight, Home, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 // import { Separator } from "@/components/ui/separator";
 import RoleShareMenu from "@/components/RoleShareMenu";
 import FullscreenButton from "@/components/FullscreenButton";
@@ -24,6 +26,47 @@ interface HeaderBarProps {
 export function HeaderBar({ boardData, params, role, onNextGame, onHome }: HeaderBarProps) {
   const router = useRouter();
   const vocabManifest = manifest as VocabularyManifest;
+  const [isEditingCode, setIsEditingCode] = useState(false);
+  const [editCode, setEditCode] = useState(boardData.seed);
+
+  const handleCodeClick = () => {
+    setEditCode(boardData.seed);
+    setIsEditingCode(true);
+  };
+
+  const handleCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.toUpperCase();
+    // Only allow alphanumeric characters and limit to 4 characters
+    const filtered = value.replace(/[^A-Z0-9]/g, '').slice(0, 4);
+    setEditCode(filtered);
+  };
+
+  const handleCodeSubmit = () => {
+    if (editCode.length === 4) {
+      const newUrl = buildGameUrl({ seed: editCode, role: params.role, lang: params.lang });
+      router.push(newUrl);
+      setIsEditingCode(false);
+    }
+  };
+
+  const handleCodeBlur = () => {
+    if (editCode.length === 4) {
+      handleCodeSubmit();
+    } else {
+      setIsEditingCode(false);
+      setEditCode(boardData.seed);
+    }
+  };
+
+  const handleCodeKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && editCode.length === 4) {
+      handleCodeSubmit();
+    } else if (e.key === 'Escape') {
+      setIsEditingCode(false);
+      setEditCode(boardData.seed);
+    }
+  };
+
   return (
     <div className="relative z-50 rounded-xl border border-border/30 bg-white/60 dark:bg-slate-900/60 backdrop-blur-md shadow-sm p-1 sm:p-0.5">
       <div className="flex items-center justify-between gap-1.5 sm:gap-4 max-w-screen-2xl mx-auto">
@@ -53,11 +96,29 @@ export function HeaderBar({ boardData, params, role, onNextGame, onHome }: Heade
           {/* <Separator orientation="vertical" className="h-6 bg-white/20 hidden sm:block" /> */}
 
           {/* Game Code */}
-          <div className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1 rounded-md bg-white/10 border border-white/20 backdrop-blur-sm flex-shrink-0">
+          <div className="flex items-center gap-1 sm:gap-2 px-1.5 sm:px-2 py-0.5 rounded-md bg-white/10 border border-white/20 backdrop-blur-sm flex-shrink-0">
             <span className="text-xs text-white/70 hidden md:inline">Code:</span>
-            <span className="font-mono text-sm sm:text-base text-green-400 tracking-wider font-semibold">
-              {boardData.seed}
-            </span>
+            {isEditingCode ? (
+              <Input
+                type="text"
+                inputMode="text"
+                value={editCode}
+                onChange={handleCodeChange}
+                onBlur={handleCodeBlur}
+                onKeyDown={handleCodeKeyDown}
+                maxLength={4}
+                autoFocus
+                className="font-mono text-sm sm:text-base text-green-400 tracking-wider font-semibold bg-transparent border-0 p-0 h-auto text-center focus-visible:ring-0 focus-visible:ring-offset-0"
+                style={{ width: '3.5rem', fontSize: '16px' }}
+              />
+            ) : (
+              <span 
+                onClick={handleCodeClick}
+                className="font-mono text-sm sm:text-base text-green-400 tracking-wider font-semibold cursor-pointer hover:text-green-300 transition-colors inline-block text-center"
+              >
+                {boardData.seed}
+              </span>
+            )}
           </div>
 
             {/* <Separator orientation="vertical" className="h-6 bg-white/20 hidden lg:block" /> */}
