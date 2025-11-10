@@ -63,7 +63,7 @@ export default function LanguageSelector({
         aria-haspopup="true"
         aria-expanded={open}
       >
-        <Globe className="h-4 w-4" />
+        <Globe className="h-4 w-4 hidden md:block" />
         <span className="uppercase">{selectedLang}</span>
         <ChevronDown className={cn('h-4 w-4 transition-transform', open && 'rotate-180')} />
       </Button>

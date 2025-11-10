@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, Suspense } from 'react';
+import { useEffect, useState, Suspense, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import GameBoard from '@/components/GameBoard';
 import HeaderBar from '@/components/HeaderBar';
@@ -9,8 +9,25 @@ import { generateBoard, generateRandomSeed } from '@/lib/boardGenerator';
 import { parseGameParams, buildGameUrl } from '@/lib/utils';
 import { BoardData, VocabularySet, VocabularyManifest } from '@/types';
 import manifest from '@/data/vocab/manifest.json';
+import enDefault from '@/data/vocab/en/default.json';
+import esSpanish from '@/data/vocab/es/spanish.json';
+import plPolish from '@/data/vocab/pl/polish.json';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+
+// Preloaded vocabulary map
+const vocabularies: Record<string, Record<string, VocabularySet>> = {
+  en: { default: enDefault as VocabularySet },
+  es: { spanish: esSpanish as VocabularySet },
+  pl: { polish: plPolish as VocabularySet },
+};
+
+// Debug: Log what we have
+console.log('Vocabularies loaded:', {
+  en: { title: enDefault.title, first3: enDefault.words.slice(0, 3) },
+  es: { title: esSpanish.title, first3: esSpanish.words.slice(0, 3) },
+  pl: { title: plPolish.title, first3: plPolish.words.slice(0, 3) },
+});
 
 function GameContent() {
   const router = useRouter();
@@ -18,6 +35,8 @@ function GameContent() {
   const [boardData, setBoardData] = useState<BoardData | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [vocabData, setVocabData] = useState<VocabularySet | null>(null);
+  const currentSeedRef = useRef<string | null>(null);
+  const currentLangRef = useRef<string | null>(null);
 
   useEffect(() => {
     const params = parseGameParams(searchParams);
@@ -27,14 +46,33 @@ function GameContent() {
       return;
     }
 
+    // Track if seed or language changed
+    const seedChanged = currentSeedRef.current !== params.seed;
+    const langChanged = currentLangRef.current !== params.lang;
+    
+    if (seedChanged) {
+      currentSeedRef.current = params.seed;
+    }
+    if (langChanged) {
+      currentLangRef.current = params.lang;
+    }
+
     // Load vocabulary (pick the first available set for the language)
     const loadVocabulary = async () => {
       try {
         const vocabManifest = manifest as VocabularyManifest;
         const sets = vocabManifest.languages[params.lang]?.sets || {};
         const firstSet = Object.keys(sets)[0];
-        const vocabModule = await import(`@/data/vocab/${params.lang}/${firstSet}.json`);
-        const vocabDataImported = vocabModule.default as VocabularySet;
+        
+        // Get vocabulary from preloaded map
+        const vocabDataImported = vocabularies[params.lang]?.[firstSet];
+        
+        console.log('Loaded vocabulary:', {
+          lang: params.lang,
+          file: firstSet,
+          title: vocabDataImported?.title,
+          firstWords: vocabDataImported?.words.slice(0, 5)
+        });
         
         if (!vocabDataImported || !vocabDataImported.words || vocabDataImported.words.length < 25) {
           setError('Invalid vocabulary data.');
@@ -57,6 +95,12 @@ function GameContent() {
     const params = parseGameParams(searchParams);
     if (!params || !vocabData) return;
 
+    // Clear old game state
+    const oldSeed = boardData?.seed;
+    if (oldSeed) {
+      localStorage.removeItem(`game-${oldSeed}`);
+    }
+
     // Generate new seed and create new board
     const newSeed = generateRandomSeed();
     const newBoard = generateBoard(newSeed, vocabData.words);
@@ -69,9 +113,9 @@ function GameContent() {
       lang: params.lang
     });
     window.history.pushState({}, '', newUrl);
-
-    // Clear localStorage for new game
-    localStorage.removeItem(`game-${newSeed}`);
+    
+    // Update current seed ref
+    currentSeedRef.current = newSeed;
   };
 
   if (error) {
@@ -121,7 +165,7 @@ function GameContent() {
         {/* Game Board - fills remaining space and centers vertically when content fits */}
         <div className="flex-1 flex flex-col min-h-0 justify-center py-4">
           <div className="p-2 sm:p-3">
-            <GameBoard boardData={boardData} role={params.role} />
+            <GameBoard key={`${boardData.seed}-${params.lang}`} boardData={boardData} role={params.role} />
           </div>
         </div>
 

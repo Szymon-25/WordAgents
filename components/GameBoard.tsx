@@ -4,8 +4,9 @@ import { useEffect, useRef, useState } from 'react';
 import { BoardData, Role } from '@/types';
 import WordTile from './WordTile';
 import { useIsLandscape, useIsMobile } from '@/lib/useIsMobile';
-import { Maximize2, RotateCw } from 'lucide-react';
+import { Maximize2, RotateCw, X } from 'lucide-react';
 import CircularProgress from './CircularProgress';
+import { Button } from './ui/button';
 
 interface GameBoardProps {
   boardData: BoardData;
@@ -18,47 +19,26 @@ export default function GameBoard({ boardData, role }: GameBoardProps) {
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
   const fsRef = useRef<HTMLDivElement | null>(null);
   const [tileDims, setTileDims] = useState<{ w: number; h: number } | null>(null);
+  const initializedSeed = useRef<string | null>(null);
 
   const [tiles, setTiles] = useState(() => {
-    // Initialize tiles with saved state if available
-    if (typeof window !== 'undefined') {
-      const savedState = localStorage.getItem(`game-${boardData.seed}`);
-      if (savedState) {
-        try {
-          const guessedIndices = JSON.parse(savedState) as number[];
-          return boardData.tiles.map(tile =>
-            guessedIndices.includes(tile.index)
-              ? { ...tile, guessed: true }
-              : tile
-          );
-        } catch (e) {
-          console.error('Failed to load game state:', e);
-        }
-      }
-    }
+    // Always start fresh - don't load saved state
+    initializedSeed.current = boardData.seed;
     return boardData.tiles;
   });
 
-  // Update tiles when boardData changes (e.g., new game)
+  // Update tiles when boardData changes (e.g., new game, different seed, or language change)
   useEffect(() => {
+    // Always update tiles when boardData changes
+    initializedSeed.current = boardData.seed;
+    
+    // Clear any saved state for this game
     if (typeof window !== 'undefined') {
-      const savedState = localStorage.getItem(`game-${boardData.seed}`);
-      if (savedState) {
-        try {
-          const guessedIndices = JSON.parse(savedState) as number[];
-          setTiles(boardData.tiles.map(tile =>
-            guessedIndices.includes(tile.index)
-              ? { ...tile, guessed: true }
-              : tile
-          ));
-        } catch (e) {
-          console.error('Failed to load game state:', e);
-          setTiles(boardData.tiles);
-        }
-      } else {
-        setTiles(boardData.tiles);
-      }
+      localStorage.removeItem(`game-${boardData.seed}`);
     }
+    
+    // Update with new tiles
+    setTiles(boardData.tiles);
   }, [boardData]);
 
   useEffect(() => {
@@ -87,6 +67,16 @@ export default function GameBoard({ boardData, role }: GameBoardProps) {
       }
     } catch (e) {
       console.warn('Fullscreen request failed:', e);
+    }
+  };
+
+  const exitFullscreen = async () => {
+    try {
+      if (document.fullscreenElement) {
+        await document.exitFullscreen();
+      }
+    } catch (e) {
+      console.warn('Failed to exit fullscreen:', e);
     }
   };
 
@@ -132,11 +122,8 @@ export default function GameBoard({ boardData, role }: GameBoardProps) {
         tile.index === index ? { ...tile, guessed: !tile.guessed } : tile
       );
 
-      // Save to localStorage
-      const guessedIndices = newTiles
-        .filter(t => t.guessed)
-        .map(t => t.index);
-      localStorage.setItem(`game-${boardData.seed}`, JSON.stringify(guessedIndices));
+      // Don't save to localStorage - always start fresh
+      // (state will be lost on page refresh or navigation)
 
       return newTiles;
     });
@@ -208,6 +195,15 @@ export default function GameBoard({ boardData, role }: GameBoardProps) {
           <div ref={fsRef} className="relative flex-10 w-full">
             {isTargetFullscreen ? (
               <div className="absolute inset-0 flex items-center justify-center" style={{ padding: 6 }}>
+                {/* Exit fullscreen button */}
+                <button
+                  onClick={exitFullscreen}
+                  className="absolute top-2 right-2 z-50 p-1 rounded-full bg-black/50 hover:bg-black/70 text-white transition-colors backdrop-blur-sm"
+                  aria-label="Exit fullscreen"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+                
                 <div
                   className="grid"
                   style={
@@ -235,6 +231,9 @@ export default function GameBoard({ boardData, role }: GameBoardProps) {
                   ))}
                 </div>
               </div>
+            ) : needsOverlay ? (
+              // Don't render the grid when overlay is shown on mobile
+              <div className="relative w-full h-full" />
             ) : (
               <div className="relative grid grid-cols-5 gap-1 md:gap-1.5 lg:gap-2 w-full">
                 {tiles.map((tile) => (
@@ -251,31 +250,23 @@ export default function GameBoard({ boardData, role }: GameBoardProps) {
 
             {/* Mobile overlay to encourage fullscreen + landscape */}
             {needsOverlay && (
-              <div className="absolute inset-0 z-20 flex items-center justify-center">
-                <div className="absolute inset-0 bg-black/35 backdrop-blur-[1px]" />
-                <div className="relative mx-3 max-w-sm w-[92%] text-center rounded-xl border border-gray-200 shadow-xl p-4 sm:p-5 bg-white/95 z-30">
+              <div className="absolute inset-0 z-20 flex items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50">
+                <div className="relative mx-3 max-w-sm w-[92%] text-center rounded-xl border border-gray-200 shadow-xl p-4 sm:p-5 bg-white z-30">
                   <div className="mx-auto mb-3 inline-flex h-12 w-12 items-center justify-center rounded-full bg-indigo-100 text-indigo-700">
                     <Maximize2 />
                   </div>
-                  <h2 className="text-base font-semibold text-gray-900">Better on Fullscreen</h2>
+                  <h2 className="text-base font-semibold text-gray-900">Better on fullscreen</h2>
                   <p className="mt-1 text-sm text-gray-600">
-                    For small screens we use fullscreen and landscape so words are fully visible.
+                    For small screens we use fullscreen and landscape view so words are fully visible.
                   </p>
 
-                  {!isLandscape && (
-                    <div className="mt-3 inline-flex items-center gap-2 text-sm font-medium text-amber-700 bg-amber-50 border border-amber-200 rounded-full px-3 py-1">
-                      <RotateCw className="h-4 w-4" />
-                      Rotate your phone horizontally
-                    </div>
-                  )}
-
-                  <button
-                    type="button"
-                    onClick={requestMobileFullscreen}
-                    className="mt-4 w-full rounded-lg bg-gradient-to-r from-indigo-600 to-blue-600 text-white font-semibold py-2 active:scale-[0.98] shadow hover:from-indigo-700 hover:to-blue-700"
+                  <Button
+                    onClick={() => requestMobileFullscreen()}
+                    className="w-full h-11 mt-4 py-2 text-sm text-white font-semibold shadow"
+                    style={{ backgroundColor: '#32056e' }}
                   >
                     Enter fullscreen
-                  </button>
+                  </Button>
                 </div>
               </div>
             )}
