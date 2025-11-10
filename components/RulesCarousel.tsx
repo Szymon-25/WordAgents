@@ -85,7 +85,7 @@ export default function RulesCarousel() {
           {rulesSlides.map((slide, index) => (
             <CarouselItem key={index}>
               <Card className="border-0 shadow-none">
-                  <CardContent className="flex flex-col items-center justify-center p-6 h-[500px]">
+                  <CardContent className="flex flex-col items-center justify-center p-6 h-[550px]">
                     <div className={cn(
                       "mb-4 p-4 rounded-lg bg-gradient-to-br flex items-center justify-center w-full max-w-[400px] max-h-[280px]",
                       slide.color,
@@ -96,7 +96,7 @@ export default function RulesCarousel() {
                         alt={slide.title}
                         width={512}
                         height={512}
-                        className="w-full h-auto max-h-[350px] object-contain block rounded-lg"
+                        className="w-full h-auto max-h-[330px] object-contain block rounded-lg"
                       />
                     </div>
                   <h3 className={cn(
