@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import RulesDialogProvider from "@/components/RulesDialogProvider";
 
 export const metadata: Metadata = {
   title: "Word Agents - Word Guessing Game",
@@ -14,7 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased">
-        {children}
+        <RulesDialogProvider>{children}</RulesDialogProvider>
       </body>
     </html>
   );

@@ -10,9 +10,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import Image from 'next/image';
 import { ArrowLeft } from 'lucide-react';
+import { useRules } from '@/components/RulesDialogProvider';
 
 export default function Home() {
   const router = useRouter();
+  const { open } = useRules();
   const [mode, setMode] = useState<'create' | 'join' | null>(null);
   const [selectedLang] = useState('en'); // language fixed for now
   const [selectedRole, setSelectedRole] = useState<Role>('guesser');
@@ -59,7 +61,7 @@ export default function Home() {
                   value={joinCode}
                   onChange={(e) => setJoinCode(e.target.value.toUpperCase())}
                   placeholder="Game code"
-                  maxLength={8}
+                  maxLength={4}
                   className="text-center h-11 text-base font-semibold"
                 />
                 <Button
@@ -131,6 +133,17 @@ export default function Home() {
           </div>
         </div>
       </main>
+      {/* Rules button fixed at bottom center on home */}
+      <div className="fixed bottom-4 left-0 right-0 flex items-center justify-center pointer-events-none">
+        <div className="pointer-events-auto">
+          <button
+            onClick={open}
+            className="rounded-full bg-white/90 dark:bg-slate-800/90 text-sm px-4 py-2 shadow-lg border"
+          >
+            Rules
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

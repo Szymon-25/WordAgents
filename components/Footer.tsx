@@ -1,8 +1,11 @@
 "use client";
 
 import { Heart, Github, Mail } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useRules } from "@/components/RulesDialogProvider";
 
 export function Footer() {
+  const { open } = useRules();
   return (
     <div className="relative z-50 rounded-xl border border-border/30 bg-white/60 dark:bg-slate-900/60 backdrop-blur-md shadow-sm p-1 sm:p-0.5">
       <div className="flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-4 max-w-screen-2xl mx-auto px-2 py-1.5 sm:py-2">
@@ -17,8 +20,8 @@ export function Footer() {
 
         
 
-        {/* Center section - Links */}
-        <div className="text-white/60 text-xs hidden lg:block">
+  {/* Center section - Links */}
+  <div className="text-white/60 text-xs hidden lg:flex items-center gap-2">
           {/* <a 
             href="https://github.com/Szymon-25/Codenames" 
             target="_blank" 
@@ -29,13 +32,17 @@ export function Footer() {
             <span className="hidden md:inline">Source Code</span>
           </a> 
           <span className="text-white/30">|</span>*/}
-          <a 
-            href="mailto:contact@wordagents.com" 
+          <a
+            href="mailto:contact@wordagents.com"
             className="flex items-center gap-1.5 hover:text-white transition-colors"
           >
             <Mail className="h-4 w-4" />
-            <span className="hidden md:inline">Contact</span>
+            <span className="text-[10px] sm:text-sm">Contact</span>
           </a>
+          <span className="hidden sm:inline">•</span>
+          <button onClick={open} className="text-[10px] sm:text-sm hover:text-white transition-colors">
+            Rules
+          </button>
         </div>
       </div>
     </div>

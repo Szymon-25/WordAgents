@@ -18,7 +18,7 @@ export default function RoleSelector({ selectedRole, onRoleChange }: RoleSelecto
           type="button"
           onClick={() => onRoleChange('master')}
           className={`
-            w-full px-3 py-3 rounded-md border font-medium text-xs transition-all
+            px-3 py-3 rounded-md border font-medium text-xs transition-all
             ${
               selectedRole === 'master'
           ? 'bg-[#6611aa] text-white border-[#6611aa]'
@@ -34,7 +34,7 @@ export default function RoleSelector({ selectedRole, onRoleChange }: RoleSelecto
           type="button"
           onClick={() => onRoleChange('guesser')}
           className={`
-            w-full px-3 py-3 rounded-md border font-medium text-xs transition-all
+            px-3 py-3 rounded-md border font-medium text-xs transition-all
             ${
               selectedRole === 'guesser'
           ? 'bg-[#4e0ac1] text-white border-[#4e0ac1]'

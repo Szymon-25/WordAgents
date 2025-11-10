@@ -37,6 +37,7 @@ export function RoleShareMenu({ params, seed, className }: RoleShareMenuProps) {
         <Share2 className="h-4 w-4" />
         <span className="hidden sm:inline">Share links</span>
         <span className="sm:hidden">Share</span>
+        
         <ChevronDown className={cn("h-4 w-4 transition-transform", open && "rotate-180")} />
       </Button>
       {open && (
