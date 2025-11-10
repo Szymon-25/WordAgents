@@ -7,8 +7,11 @@ import { Badge } from "@/components/ui/badge";
 // import { Separator } from "@/components/ui/separator";
 import RoleShareMenu from "@/components/RoleShareMenu";
 import FullscreenButton from "@/components/FullscreenButton";
-import { BoardData, GameParams, Role } from "@/types";
-import { cn } from "@/lib/utils";
+import { BoardData, GameParams, Role, VocabularyManifest } from "@/types";
+import { cn, buildGameUrl } from "@/lib/utils";
+import LanguageSelector from "@/components/LanguageSelector";
+import manifest from "@/data/vocab/manifest.json";
+import { useRouter } from "next/navigation";
 
 interface HeaderBarProps {
   boardData: BoardData;
@@ -19,6 +22,8 @@ interface HeaderBarProps {
 }
 
 export function HeaderBar({ boardData, params, role, onNextGame, onHome }: HeaderBarProps) {
+  const router = useRouter();
+  const vocabManifest = manifest as VocabularyManifest;
   return (
     <div className="relative z-50 rounded-xl border border-border/30 bg-white/60 dark:bg-slate-900/60 backdrop-blur-md shadow-sm p-0.5">
       <div className="flex items-center justify-between gap-4 max-w-screen-2xl mx-auto">
@@ -64,6 +69,18 @@ export function HeaderBar({ boardData, params, role, onNextGame, onHome }: Heade
 
         {/* Right section - Action buttons */}
         <div className="flex items-center gap-2 flex-shrink-0">
+          {/* In-game language selector (md and up) */}
+          <div className="hidden md:block">
+            <LanguageSelector
+              manifest={vocabManifest}
+              selectedLang={params.lang}
+              onLanguageChange={(lang) => {
+                // navigate to same game but with new language; set selection is implicit (first set)
+                const newUrl = buildGameUrl({ seed: boardData.seed, role: params.role, lang });
+                router.push(newUrl);
+              }}
+            />
+          </div>
           {/* Share menu for mobile/tablet */}
           <div className="lg:hidden">
             <RoleShareMenu params={params} seed={boardData.seed} />

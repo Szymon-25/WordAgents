@@ -16,13 +16,12 @@ export function parseGameParams(searchParams: URLSearchParams): GameParams | nul
   const seed = searchParams.get('seed');
   const role = searchParams.get('role') as 'master' | 'guesser' | null;
   const lang = searchParams.get('lang') || 'en';
-  const set = searchParams.get('set') || 'default';
 
   if (!seed || !role) {
     return null;
   }
 
-  return { seed, role, lang, set };
+  return { seed, role, lang };
 }
 
 /**
@@ -32,8 +31,7 @@ export function buildGameUrl(params: GameParams): string {
   const searchParams = new URLSearchParams({
     seed: params.seed,
     role: params.role,
-    lang: params.lang,
-    set: params.set
+    lang: params.lang
   });
   
   return `/game?${searchParams.toString()}`;

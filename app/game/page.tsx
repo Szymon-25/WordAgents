@@ -7,7 +7,8 @@ import HeaderBar from '@/components/HeaderBar';
 import Footer from '@/components/Footer';
 import { generateBoard, generateRandomSeed } from '@/lib/boardGenerator';
 import { parseGameParams, buildGameUrl } from '@/lib/utils';
-import { BoardData, VocabularySet } from '@/types';
+import { BoardData, VocabularySet, VocabularyManifest } from '@/types';
+import manifest from '@/data/vocab/manifest.json';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 
@@ -26,10 +27,13 @@ function GameContent() {
       return;
     }
 
-    // Load vocabulary
+    // Load vocabulary (pick the first available set for the language)
     const loadVocabulary = async () => {
       try {
-        const vocabModule = await import(`@/data/vocab/${params.lang}/${params.set}.json`);
+        const vocabManifest = manifest as VocabularyManifest;
+        const sets = vocabManifest.languages[params.lang]?.sets || {};
+        const firstSet = Object.keys(sets)[0];
+        const vocabModule = await import(`@/data/vocab/${params.lang}/${firstSet}.json`);
         const vocabDataImported = vocabModule.default as VocabularySet;
         
         if (!vocabDataImported || !vocabDataImported.words || vocabDataImported.words.length < 25) {
@@ -58,12 +62,11 @@ function GameContent() {
     const newBoard = generateBoard(newSeed, vocabData.words);
     setBoardData(newBoard);
 
-    // Update URL without reload
+    // Update URL without reload (no set parameter)
     const newUrl = buildGameUrl({
       seed: newSeed,
       role: params.role,
-      lang: params.lang,
-      set: params.set
+      lang: params.lang
     });
     window.history.pushState({}, '', newUrl);
 

@@ -35,5 +35,4 @@ export interface GameParams {
   seed: string;
   role: Role;
   lang: string;
-  set: string;
 }
