@@ -164,8 +164,8 @@ function GameContent() {
         
         {/* Game Board - fills remaining space and centers vertically when content fits */}
         <div className="flex-1 flex flex-col min-h-0 justify-center py-4">
-          <div className="p-2 sm:p-3">
-            <GameBoard key={`${boardData.seed}-${params.lang}`} boardData={boardData} role={params.role} />
+            <div className="p-2 sm:p-3">
+            <GameBoard boardData={boardData} role={params.role} />
           </div>
         </div>
 
