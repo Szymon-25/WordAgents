@@ -2,30 +2,21 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import LanguageSelector from '@/components/LanguageSelector';
 import RoleSelector from '@/components/RoleSelector';
-import RulesCarousel from '@/components/RulesCarousel';
 import { generateRandomSeed } from '@/lib/boardGenerator';
 import { buildGameUrl } from '@/lib/utils';
-import { Role, VocabularyManifest } from '@/types';
-import manifest from '@/data/vocab/manifest.json';
+import { Role } from '@/types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import Image from 'next/image';
+import { ArrowLeft } from 'lucide-react';
 
 export default function Home() {
   const router = useRouter();
   const [mode, setMode] = useState<'create' | 'join' | null>(null);
-  const [selectedLang, setSelectedLang] = useState('en');
+  const [selectedLang] = useState('en'); // language fixed for now
   const [selectedRole, setSelectedRole] = useState<Role>('guesser');
   const [joinCode, setJoinCode] = useState('');
-
-  const vocabManifest = manifest as VocabularyManifest;
-
-  const handleLanguageChange = (lang: string) => {
-    setSelectedLang(lang);
-  };
 
   const handleCreateGame = () => {
     const seed = generateRandomSeed();
@@ -37,8 +28,12 @@ export default function Home() {
     router.push(url);
   };
 
-  const handleJoinGame = () => {
+  const handleEnterCode = () => {
     if (!joinCode.trim()) return;
+    setMode('join');
+  };
+
+  const handleJoinGame = () => {
     const url = buildGameUrl({
       seed: joinCode.trim().toUpperCase(),
       role: selectedRole,
@@ -51,14 +46,13 @@ export default function Home() {
     <div className="min-h-screen flex items-center justify-center p-6">
       <main className="w-full flex items-center justify-center">
         <div>
-          <header className="mb-4 flex items-center gap-3 justify-center pr-5">
-            <Image alt="Word Agents Logo" src="/logo.png" width={55} height={55}/>
-            <h1 className="text-4xl font-extrabold text-white bg-clip-text">Word Agents</h1>
-            </header>
-        <div className="bg-white rounded-lg p-6 w-full max-w-sm text-center">
-          {mode === null && (
-            <div className="space-y-3">
-              <div>
+          <header className="mb-3 flex items-center gap-2 justify-center">
+            <Image alt="Word Agents Logo" src="/logo.png" width={40} height={40} />
+            <h1 className="text-3xl font-extrabold text-white">Word Agents</h1>
+          </header>
+          <div className="bg-white rounded-lg p-5 w-[18rem] min-h-[220px] flex flex-col items-center justify-center">
+            {mode === null && (
+              <div className="space-y-2 w-full">
                 <Input
                   id="code"
                   type="text"
@@ -66,57 +60,75 @@ export default function Home() {
                   onChange={(e) => setJoinCode(e.target.value.toUpperCase())}
                   placeholder="Game code"
                   maxLength={8}
-                  className="text-center text-lg font-bold  "
+                  className="text-center h-11 text-base font-semibold"
                 />
+                <Button
+                  onClick={handleEnterCode}
+                  disabled={joinCode.trim().length === 0}
+                  className="w-full h-11 text-white font-semibold disabled:opacity-100"
+                  style={{ backgroundColor: '#000', borderColor: '#000', boxShadow: 'none' }}
+                >
+                  Enter
+                </Button>
+                <div className="flex items-center gap-2">
+                  <span className="flex-1 h-px bg-gray-300" />
+                  <span className="text-xs text-gray-400">or</span>
+                  <span className="flex-1 h-px bg-gray-300" />
+                </div>
+                <Button
+                  onClick={() => setMode('create')}
+                  className="w-full h-11 text-white font-semibold shadow"
+                  style={{ backgroundColor: '#32056e' }}
+                >
+                  Create new game
+                </Button>
               </div>
-
-              <Button
-                onClick={handleJoinGame}
-                disabled={joinCode.trim().length === 0}
-                className="w-full h-11 text-white font-semibold disabled:opacity-100"
-                style={{ backgroundColor: '#000', borderColor: '#000', boxShadow: 'none' }}
-              >
-                Enter
-              </Button>
-
-              <div className="flex items-center gap-3">
-                <span className="flex-1 h-px bg-gray-300" />
-                <span className="text-sm text-gray-400">or</span>
-                <span className="flex-1 h-px bg-gray-300" />
+            )}
+            {mode === 'create' && (
+              <div className="space-y-2 w-full">
+                <div className="relative w-full">
+                  <Button onClick={() => setMode(null)} variant="ghost" size="icon-sm" className="text-gray-700 absolute left-0 top-0">
+                    <ArrowLeft className="h-4 w-4" />
+                  </Button>
+                  <h2 className="text-base font-bold text-gray-900 text-center">Create new game</h2>
+                </div>
+                <div className="w-full">
+                  <div className="mx-auto">
+                    <RoleSelector selectedRole={selectedRole} onRoleChange={setSelectedRole} />
+                  </div>
+                </div>
+                <Button
+                  onClick={handleCreateGame}
+                  className="w-full h-11 text-white font-semibold shadow"
+                  style={{ backgroundColor: '#000' }}
+                >
+                  Start game
+                </Button>
               </div>
-
-              <Button
-                onClick={() => setMode('create')}
-                className="w-full h-11 text-white font-semibold shadow"
-                style={{ backgroundColor: '#32056e' }}
-              >
-                Create new game
-              </Button>
-            </div>
-          )}
-
-          {mode === 'create' && (
-            <div className="space-y-4">
-              <Button onClick={() => setMode(null)} variant="ghost" className="-ml-2">
-                ← Back
-              </Button>
-
-              <h2 className="text-xl font-bold text-gray-900">Create New Game</h2>
-
-              <RoleSelector
-                selectedRole={selectedRole}
-                onRoleChange={setSelectedRole}
-              />
-
-              <Button
-                onClick={handleCreateGame}
-                className="w-full h-11 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold"
-              >
-                Start Game →
-              </Button>
-            </div>
-          )}
-        </div>
+            )}
+            {mode === 'join' && (
+              <div className="space-y-2 w-full">
+                <div className="relative w-full">
+                  <Button onClick={() => setMode(null)} variant="ghost" size="icon-sm" className="text-gray-700 absolute left-0 top-0">
+                    <ArrowLeft className="h-4 w-4" />
+                  </Button>
+                  <h2 className="text-base font-bold text-gray-900 text-center">Join game</h2>
+                </div>
+                <div className="w-full">
+                  <div className="mx-auto">
+                    <RoleSelector selectedRole={selectedRole} onRoleChange={setSelectedRole} />
+                  </div>
+                </div>
+                <Button
+                  onClick={handleJoinGame}
+                  className="w-full h-11 text-white font-semibold shadow"
+                  style={{ backgroundColor: '#000' }}
+                >
+                  Join game
+                </Button>
+              </div>
+            )}
+          </div>
         </div>
       </main>
     </div>
