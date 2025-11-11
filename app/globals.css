@@ -63,7 +63,8 @@ html, body, #__next {
 }
 
 body {
-  background-image: url('/background.jpg');
+  /* BasePath-aware background URL injected from layout; fallback for local dev */
+  background-image: var(--bg-url, url('/background.jpg'));
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
