@@ -45,6 +45,8 @@ export default function Home() {
   };
 
   return (
+    <>
+    {/* Google Analytics moved to app/layout.tsx (global) */}
     <div className="min-h-screen flex items-center justify-center p-6">
       <main className="w-full flex items-center justify-center">
         <div>
@@ -145,5 +147,6 @@ export default function Home() {
         </div>
       </div>
     </div>
+    </>
   );
 }
