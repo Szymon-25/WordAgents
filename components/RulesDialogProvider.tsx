@@ -116,9 +116,9 @@ function RulesDialog({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
       >
         <div className="rounded-lg bg-white border border-border p-4">
           <div className="flex justify-center items-center gap-4">
-            <h2 id="rules-dialog-title" className="text-lg font-bold">
+            {/* <h2 id="rules-dialog-title" className="text-[#110b66] text-lg font-semibold">
               How to play?
-            </h2>
+            </h2> */}
             <div className="ml-auto">
               <button onClick={onClose} aria-label="Close rules">
                 <X className="h-6 w-6 text-[#110b66]" />
@@ -126,7 +126,7 @@ function RulesDialog({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
             </div>
           </div>
 
-          <div className="mt-3">
+          <div className="mt-0">
             <RulesCarousel />
           </div>
         </div>
