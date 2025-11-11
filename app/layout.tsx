@@ -13,7 +13,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const prefix = process.env.NEXT_PUBLIC_BASE_PATH || "";
+  const prefix = "";//process.env.NEXT_PUBLIC_BASE_PATH || "";
   const bgUrl = `${prefix}/background.webp`;
   return (
     <html lang="en">

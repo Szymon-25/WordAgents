@@ -1,5 +1,10 @@
 # 🕵️ Codenames
 
+!!!!!!!!!
+Zeby hostowac na wordagents.app zakomentowalem wszystkie wstawki dodajace WordAgents w sciezkach do obrazow
+Jesli chcesz wrocic do hostowania na domenie Github Pages github.io, musisz odkomentowac w layout.ts i next.config.ts
+!!!!!!!!!
+
 A modern, accessible, and deterministic web-based implementation of the popular word-guessing game Codenames. Built with Next.js, TypeScript, and TailwindCSS.
 
 ## ✨ Features
