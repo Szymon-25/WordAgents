@@ -55,5 +55,5 @@ export async function copyToClipboard(text: string): Promise<boolean> {
  */
 export function getShareUrl(params: GameParams): string {
   if (typeof window === 'undefined') return '';
-  return `${window.location.origin}${buildGameUrl(params)}`;
+  return `${window.location.protocol}//${window.location.host}${window.location.pathname.replace(/\/game.*$/, '')}${buildGameUrl(params)}`;
 }
