@@ -14,6 +14,8 @@ export default function RootLayout({
 }>) {
   const prefix = process.env.NEXT_PUBLIC_BASE_PATH || "";
   const bgUrl = `${prefix}/background.jpg`;
+  console.log("Background URL:", bgUrl);
+  console.log("Process env:", process.env.NEXT_PUBLIC_BASE_PATH);
   return (
     <html lang="en">
       <head>

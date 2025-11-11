@@ -8,5 +8,5 @@ const nextConfig: NextConfig = {
   basePath: isProd ? process.env.NEXT_PUBLIC_BASE_PATH : '',
   assetPrefix: isProd ? process.env.NEXT_PUBLIC_BASE_PATH : '',
 };
-
+  
 export default nextConfig;
