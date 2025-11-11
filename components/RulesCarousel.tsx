@@ -17,34 +17,33 @@ const rulesSlides = [
   {
     image: "/guesser_view.png",
     title: "Game Objective",
-    description: "Two teams compete to identify their agents on a 5×5 grid of words. The first team to find all their agents wins!",
+    description: "Two teams compete to identify their agents on a 5×5 grid of words. The first team to uncover all words of their color wins!",
     color: "from-blue-500 to-indigo-600"
   },
   {
     image: "/spymaster_view.png",
     title: "Spymaster Role",
-    description: "The Spymaster sees all card colors and gives one-word clues followed by a number to help teammates identify their agents.",
+    description: "Spymasters give a one-word clue and number showing how many tiles their team should guess in this turn.",
     color: "from-purple-500 to-pink-600"
   },
   {
     image: "/opis_kartek.png",
-    title: "Guesser Role",
-    description: "Guessers see neutral cards and must identify their team's agents based on the Spymaster's clues. Choose wisely!",
+    title: "Card Types",
+    description: "Red & Blue tiles (8 or 9), Neutral bystanders (7), and Assassin (1). \nAvoid the assassin at all costs - it's an instant loss!",
     color: "from-green-500 to-teal-600"
   },
   {
     image: "/scoring_points.png",
-    title: "Playing Together",
-    description: "Share the 4-character game code with your team. Everyone with the same code sees the same board. Perfect for remote play!",
+    title: "Additional Rule",
+    description: "If you uncover a neutral or opposing team's tile, your turn ends immediately, even if the Spymaster's clue number was higher.",
     color: "from-cyan-500 to-blue-600"
   },
   {
     image: "/code_share.png",
-    title: "Card Types",
-    description: "Blue & Red agents (9 each), Neutral bystanders (7), and 1 Assassin. Avoid the assassin at all costs - it's an instant loss!",
+    title: "Playing Together",
+    description: "Share the code. It gives everyone the same board.\nChoose to be Spymaster or Guesser.",
     color: "from-orange-500 to-red-600"
   },
- 
 ];
 
 export default function RulesCarousel() {
@@ -87,7 +86,7 @@ export default function RulesCarousel() {
               <Card className="border-0 shadow-none">
                   <CardContent className="flex flex-col items-center justify-center p-6 h-[550px]">
                     <div className={cn(
-                      "mb-4 p-4 rounded-lg bg-gradient-to-br flex items-center justify-center w-full max-w-[400px] max-h-[280px]",
+                      "mb-4 p-4 rounded-lg bg-gradient-to-br flex items-center justify-center w-full max-w-[400px] h-[280px]",
                       slide.color,
                       "bg-opacity-20"
                     )}>
@@ -96,16 +95,13 @@ export default function RulesCarousel() {
                         alt={slide.title}
                         width={512}
                         height={512}
-                        className="w-full h-auto max-h-[330px] object-contain block rounded-lg"
+                        className="w-full h-auto max-h-[250px] object-contain block rounded-lg"
                       />
                     </div>
-                  <h3 className={cn(
-                    "text-2xl pt-10 font-bold mb-3 bg-gradient-to-r bg-clip-text text-transparent",
-                    slide.color
-                  )}>
+                    <h3 className="text-2xl pt-10 font-bold mb-3 text-[#110b66]">
                     {slide.title}
-                  </h3>
-                  <p className="text-center text-gray-700 leading-relaxed">
+                    </h3>
+                  <p className="text-center text-gray-700 leading-relaxed whitespace-pre-line max-w-[500px]">
                     {slide.description}
                   </p>
                 </CardContent>

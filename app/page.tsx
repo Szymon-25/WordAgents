@@ -134,11 +134,11 @@ export default function Home() {
         </div>
       </main>
       {/* Rules button fixed at bottom center on home */}
-      <div className="fixed bottom-4 left-0 right-0 flex items-center justify-center pointer-events-none">
+      <div className="fixed bottom-6 left-0 right-0 flex items-center justify-center pointer-events-none">
         <div className="pointer-events-auto">
-          <button
-            onClick={open}
-            className="rounded-full bg-white/90 dark:bg-slate-800/90 text-sm px-4 py-2 shadow-lg border"
+          <button 
+            onClick={open} 
+            className="px-4 py-1 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl text-sm font-medium text-white hover:bg-white/20 hover:border-white/30 transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105"
           >
             Rules
           </button>
