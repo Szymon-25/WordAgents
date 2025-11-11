@@ -16,9 +16,7 @@ export default function RootLayout({
   const bgUrl = `${prefix}/background.webp`;
   return (
     <html lang="en">
-      <body className="antialiased">
-      {/* <head>
-        {/* Preload background for faster first paint *
+      <head>
   <link rel="preload" as="image" href={bgUrl} fetchPriority="high" />
       </head>
       <body className="antialiased" style={{ ["--bg-url" as any]: `url('${bgUrl}')` }}>
