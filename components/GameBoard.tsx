@@ -179,7 +179,7 @@ export default function GameBoard({ boardData, role }: GameBoardProps) {
             </div>
             {/* Blue character image (visible for both roles) */}
             <img 
-              src="./blue_character.png" 
+              src="./blue_character.webp" 
               alt="Blue Team Character" 
               className="w-full object-contain"
               style={{ height: 'calc(5 * 80px + 4 * 4px)' }}
@@ -294,7 +294,7 @@ export default function GameBoard({ boardData, role }: GameBoardProps) {
             </div>
             {/* Red character image (visible for both roles) */}
             <img 
-              src="./red_character.png" 
+              src="./red_character.webp" 
               alt="Red Team Character" 
               className="w-full object-contain"
               style={{ height: 'calc(5 * 80px + 4 * 4px)' }}

@@ -75,7 +75,7 @@ export function HeaderBar({ boardData, params, role, onNextGame, onHome }: Heade
           {/* Title and Role */}
           <div className="flex items-center gap-1.5 sm:gap-3">
             <h1 className="flex items-center gap-1 sm:gap-2 text-white tracking-tight">
-              <Image alt="Word Agents Logo" src="./logo.png" width={24} height={24} className="sm:w-8 sm:h-8"/>
+              <Image alt="Word Agents Logo" src="./logo.webp" width={24} height={24} className="sm:w-8 sm:h-8"/>
               <span className="hidden sm:inline">Word Agents</span>
             </h1>
             

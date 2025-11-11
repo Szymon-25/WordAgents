@@ -66,7 +66,7 @@ export default function Home() {
       <main className="w-full flex items-center justify-center">
         <div>
           <header className="mb-3 flex items-center gap-2 justify-center">
-            <Image alt="Word Agents Logo" src="./logo.png" width={40} height={40} priority />
+            <Image alt="Word Agents Logo" src="./logo.webp" width={40} height={40}/>
             <h1 className="text-3xl font-bold text-white pr-3" style={{ fontFamily: 'Roboto, sans-serif' }}>Word Agents</h1>
           </header>
           <div className="bg-white rounded-lg p-5 w-[18rem] min-h-[220px] flex flex-col items-center justify-center">
