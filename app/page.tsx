@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/input';
 import Image from 'next/image';
 import { ArrowLeft } from 'lucide-react';
 import { useRules } from '@/components/RulesDialogProvider';
+import Script from 'next/script';
 
 export default function Home() {
   const router = useRouter();
@@ -46,12 +47,26 @@ export default function Home() {
 
   return (
     <>
-    {/* Google Analytics moved to app/layout.tsx (global) */}
+    {/* Google Analytics */}
+      <Script
+        src="https://www.googletagmanager.com/gtag/js?id=G-GNPNMMZVKW"
+        strategy="afterInteractive"
+      />
+      <Script id="google-analytics" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-GNPNMMZVKW', {
+            page_path: window.location.pathname,
+          });
+        `}
+      </Script>
     <div className="min-h-screen flex items-center justify-center p-6">
       <main className="w-full flex items-center justify-center">
         <div>
           <header className="mb-3 flex items-center gap-2 justify-center">
-            <Image alt="Word Agents Logo" src="/logo.png" width={40} height={40} />
+            <Image alt="Word Agents Logo" src="./logo.png" width={40} height={40} />
             <h1 className="text-3xl font-bold text-white pr-3" style={{ fontFamily: 'Roboto, sans-serif' }}>Word Agents</h1>
           </header>
           <div className="bg-white rounded-lg p-5 w-[18rem] min-h-[220px] flex flex-col items-center justify-center">

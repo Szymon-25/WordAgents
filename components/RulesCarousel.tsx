@@ -15,31 +15,31 @@ import Image from "next/image";
 
 const rulesSlides = [
   {
-    image: "/guesser_view.png",
+    image: "./guesser_view.png",
     title: "Game Objective",
     description: "Two teams compete to identify their agents on a 5×5 grid of words. The first team to uncover all words of their color wins!",
     color: "from-blue-500 to-indigo-600"
   },
   {
-    image: "/spymaster_view.png",
+    image: "./spymaster_view.png",
     title: "Spymaster Role",
     description: "Spymasters give a one-word clue and number showing how many tiles their team should guess in this turn.",
     color: "from-purple-500 to-pink-600"
   },
   {
-    image: "/opis_kartek.png",
+    image: "./opis_kartek.png",
     title: "Card Types",
     description: "Red & Blue tiles (8 or 9), Neutral bystanders (7), and Assassin (1). \nAvoid the assassin at all costs - it's an instant loss!",
     color: "from-green-500 to-teal-600"
   },
   {
-    image: "/scoring_points.png",
+    image: "./scoring_points.png",
     title: "Additional Rule",
     description: "If you uncover a neutral or opposing team's tile, your turn ends immediately, even if the Spymaster's clue number was higher.",
     color: "from-cyan-500 to-blue-600"
   },
   {
-    image: "/code_share.png",
+    image: "./code_share.png",
     title: "Playing Together",
     description: "Share the code. It gives everyone the same board.\nChoose to be Spymaster or Guesser.",
     color: "from-orange-500 to-red-600"
