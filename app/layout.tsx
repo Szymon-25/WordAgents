@@ -22,12 +22,11 @@ export default function RootLayout({
       </head>
       <body className="antialiased" style={{ ["--bg-url" as any]: `url('${bgUrl}')` }}>
         {/* Debug banner showing resolved background URL and base path; remove in production */}
-        {process.env.NODE_ENV !== 'production' && (
+        
           <div className="fixed top-0 left-0 right-0 z-50 text-xs font-mono bg-black/70 text-white px-3 py-1 flex flex-wrap gap-4 justify-center">
             <span>BG URL: {bgUrl}</span>
             <span>BASE_PATH: {prefix || '(none)'}</span>
           </div>
-        )}
         <RulesDialogProvider>{children}</RulesDialogProvider>
       </body>
     </html>
