@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/input';
 import Image from 'next/image';
 import { ArrowLeft } from 'lucide-react';
 import { useRules } from '@/components/RulesDialogProvider';
-import Script from 'next/script';
+// Removed legacy gtag Scripts in favor of Firebase Analytics
 
 export default function Home() {
   const router = useRouter();
@@ -47,21 +47,7 @@ export default function Home() {
 
   return (
     <>
-    {/* Google Analytics */}
-      <Script
-        src="https://www.googletagmanager.com/gtag/js?id=G-GNPNMMZVKW"
-        strategy="afterInteractive"
-      />
-      <Script id="google-analytics" strategy="afterInteractive">
-        {`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-GNPNMMZVKW', {
-            page_path: window.location.pathname,
-          });
-        `}
-      </Script>
+    {/* Google Analytics via Firebase handled globally in layout */}
     <div className="min-h-screen flex items-center justify-center p-6">
       <main className="w-full flex items-center justify-center">
         <div>

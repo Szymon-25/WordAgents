@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import RulesDialogProvider from "@/components/RulesDialogProvider";
+import FirebaseAnalytics from "@/components/FirebaseAnalytics";
 
 export const metadata: Metadata = {
   title: "Word Agents",
@@ -26,7 +27,8 @@ export default function RootLayout({
             <span>BG URL: {bgUrl}</span>
             <span>BASE_PATH: {prefix || '(none)'}</span>
           </div> */}
-        <RulesDialogProvider>{children}</RulesDialogProvider>
+  <FirebaseAnalytics />
+  <RulesDialogProvider>{children}</RulesDialogProvider>
       </body>
     </html>
   );
