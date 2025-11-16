@@ -33,7 +33,7 @@ export function Footer() {
           </a> 
           <span className="text-white/30">|</span>*/}
           <a
-            href="mailto:contact@wordagents.com"
+            href="mailto:studiokawon@gmail.com"
             className="flex items-center gap-1.5 hover:text-white transition-colors"
           >
             <Mail className="h-4 w-4" />
