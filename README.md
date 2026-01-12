@@ -1,5 +1,7 @@
 # 🕵️ Codenames
 
+This game is available on: [wordagents.app](https://wordagents.app)
+
 !!!!!!!!!
 Zeby hostowac na wordagents.app zakomentowalem wszystkie wstawki dodajace WordAgents w sciezkach do obrazow
 Jesli chcesz wrocic do hostowania na domenie Github Pages github.io, musisz odkomentowac w layout.ts i next.config.ts
