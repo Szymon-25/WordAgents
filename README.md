@@ -1,4 +1,4 @@
-# 🕵️ Codenames
+# 🕵️ Word Agents
 
 This game is available on: [wordagents.app](https://wordagents.app)
 
@@ -7,7 +7,9 @@ Zeby hostowac na wordagents.app zakomentowalem wszystkie wstawki dodajace WordAg
 Jesli chcesz wrocic do hostowania na domenie Github Pages github.io, musisz odkomentowac w layout.ts i next.config.ts
 !!!!!!!!!
 
-A modern, accessible, and deterministic web-based implementation of the popular word-guessing game Codenames. Built with Next.js, TypeScript, and TailwindCSS.
+
+
+A modern, accessible, and deterministic web-based implementation of the popular word-guessing game Word Agents. Built with Next.js, TypeScript, and TailwindCSS.
 
 ## ✨ Features
 
@@ -33,8 +35,8 @@ A modern, accessible, and deterministic web-based implementation of the popular 
 
 ```bash
 # Clone the repository
-git clone https://github.com/Szymon-25/Codenames.git
-cd Codenames
+git clone https://github.com/Szymon-25/WordAgents.git
+cd WordAgents
 
 # Install dependencies
 npm install
